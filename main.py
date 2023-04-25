@@ -1,7 +1,5 @@
 from docx import Document
 from datetime import datetime
-import pandas as pd
-import win32com.client as win32
 
 # Buscando data
 
