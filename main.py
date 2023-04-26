@@ -34,10 +34,14 @@ else:
     mes_atual == 'DATE_ERROR'
 ano_atual = str(agora.year)
 
-
 # Buscando documento modelo
 
 doc = Document("modelo_rec.docx")
+
+# Reconhecendo tabelas
+
+tabela_preco = doc.tables[0]
+tabela_nc = doc.tables[1]
 
 # Apresentação
 
@@ -81,14 +85,43 @@ postood = input('Digite o posto do ORDENADOR DE DESPESAS (ex. Ten Cel):\n')
 
 
 for paragrafo in doc.paragraphs:
-    paragrafo.text = paragrafo.text.replace("[aprov]", aprov.upper())
-    paragrafo.text = paragrafo.text.replace("[postoa]", postoa)
     
-    paragrafo.text = paragrafo.text.replace("[fiscal]", fiscal.upper())
-    paragrafo.text = paragrafo.text.replace("[postofa]", postofa)
+    if '[aprov]' in paragrafo.text:
+        texto_aprov = paragrafo.text.replace("[aprov]", aprov.upper())
+        paragrafo.clear()
+        texto_aprov_negrito = paragrafo.add_run(texto_aprov)
+        texto_aprov_negrito.bold = True
     
-    paragrafo.text = paragrafo.text.replace("[od]", od.upper())
-    paragrafo.text = paragrafo.text.replace("[postood]", postood)
+    if '[postoa]' in paragrafo.text:
+        texto_postoa = paragrafo.text.replace("[postoa]", postoa)
+        paragrafo.clear()
+        texto_postoa_negrito = paragrafo.add_run(texto_postoa)
+        texto_postoa_negrito.bold = True
+    
+    if '[fiscal]' in paragrafo.text:
+        texto_fiscal = paragrafo.text.replace("[fiscal]", fiscal.upper())
+        paragrafo.clear()
+        texto_fiscal_negrito = paragrafo.add_run(texto_fiscal)
+        texto_fiscal_negrito.bold = True
+    
+    if '[postofa]' in paragrafo.text:
+        texto_postofa = paragrafo.text.replace("[postofa]", postofa)
+        paragrafo.clear()
+        texto_postofa_negrito = paragrafo.add_run(texto_postofa)
+        texto_postofa_negrito.bold = True
+    
+    if '[od]' in paragrafo.text:
+        texto_od = paragrafo.text.replace("[od]", od.upper())
+        paragrafo.clear()
+        texto_od_negrito = paragrafo.add_run(texto_od)
+        texto_od_negrito.bold = True
+
+    
+    if '[postood]' in paragrafo.text:
+        texto_postood = paragrafo.text.replace("[postood]", postood)
+        paragrafo.clear()
+        texto_postood_negrito = paragrafo.add_run(texto_postood)
+        texto_postood_negrito.bold = True
 
 # Fornecedor
 
@@ -135,14 +168,14 @@ for paragrafo in doc.paragraphs:
 # Nota de Crédito
 
 nc = input('Informe qual nota de crédito será utilizada: (ex: 2023NC403131)\n')
-ptres = input('Informe o PTRES da Nota de Crédito: (ex: 193894)')
-pi = input('Informe qual o PI da Nota de Crédito: (ex: E6SUPJA1QR)')
+ptres = input('Informe o PTRES da Nota de Crédito: (ex: 193894)\n')
+pi = input('Informe qual o PI da Nota de Crédito: (ex: E6SUPJA1QR)\n')
 
-for paragrafo in doc.paragraphs:
-    paragrafo.text = paragrafo.text.replace("ence", nc.upper())
-    paragrafo.text = paragrafo.text.replace("eptrese", ptres)
-    paragrafo.text = paragrafo.text.replace("epie", pi.upper())
-
+for linha in tabela_nc.rows:
+    for celula in linha.cells:
+        celula.text = celula.text.replace('eptrese', ptres)
+        celula.text = celula.text.replace('ence', nc)
+        celula.text = celula.text.replace('epie', pi)
 
 # Salvando
 
